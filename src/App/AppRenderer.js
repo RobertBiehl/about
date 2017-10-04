@@ -14,10 +14,9 @@ import AppFooter from './AppFooter';
 import ErrorPage from '../ErrorPage';
 
 const Main = styled.div`
-  max-width: 600px;
+  max-width: 960px;
   padding: 1rem;
   margin: 0 auto;
-  background: rgba(0, 0, 0, 0.1);
 `;
 
 type Props = {
@@ -41,7 +40,7 @@ type State = {
 
 const defaults = {
   error: null,
-  title: 'React Static Boilerplate',
+  title: 'Robert Biehl',
   description: '',
   hero: null,
   body: null,

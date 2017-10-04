@@ -23,9 +23,9 @@ function fetchQuery(
       method: 'POST',
       headers: {
         // Add authentication and other headers here
+        'x-api-key': 'HvBx4fa4vH58MCg04Wkp33ruyZv9qHuYaQb5viM1',
         'content-type': 'application/json',
       },
-      credentials: 'include',
       body: JSON.stringify({
         query: operation.text, // GraphQL text from input
         variables,

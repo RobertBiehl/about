@@ -63,8 +63,27 @@ if (!text.includes('babel-plugin-transform-export-extensions')) {
 }
 
 //
+// Inject "babel-plugin-markdown"
+// -----------------------------------------------------------------------------
+file = path.resolve('./node_modules/babel-preset-react-app/index.js');
+text = fs.readFileSync(file, 'utf8');
+
+if (!text.includes('babelPluginMarkdown')) {
+  if (text.includes('const plugins = [')) {
+    text = text.replace(
+      'const plugins = [',
+      "const plugins = [\n  require.resolve('./../../src/utils/babelPluginMarkdown'),"); // prettier-ignore
+    fs.writeFileSync(file, text, 'utf8');
+  } else {
+    throw new Error(`Failed to inject babelPluginMarkdown in ${file}.`); // prettier-ignore
+  }
+}
+
+//
 // Download the GraphQL schema
 // -----------------------------------------------------------------------------
+//
+/*
 if (process.argv.includes('--download-schema')) {
   file = fs.createWriteStream('./src/schema.graphql');
   https.get('https://graphql-demo.kriasoft.com/schema', resp => {
@@ -75,3 +94,4 @@ if (process.argv.includes('--download-schema')) {
     }
   });
 }
+*/

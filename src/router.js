@@ -17,29 +17,12 @@ const routes = [
   {
     path: '/',
     query: graphql`query routerHomeQuery {
-      me { ...App_me }
-      stories(first: 50) { ...Home_stories }
+      getContributorFeed { ...Home_contributors }
     }`, // prettier-ignore
-    components: () => [
-      import(/* webpackChunkName: 'home' */ './Home'),
-      import(/* webpackChunkName: 'home' */ './Home/Hero'),
-    ],
-    render: ([Home, Hero], data) => ({
+    components: () => [import(/* webpackChunkName: 'home' */ './Home')],
+    render: ([Home], data) => ({
       title: 'Home page',
-      hero: <Hero />,
-      body: <Home stories={data.stories} />,
-    }),
-  },
-  {
-    path: '/story-:id',
-    query: graphql`query routerStoryQuery($id: ID!) {
-      me { ...App_me }
-      story: node(id: $id) { ...Story_story }
-    }`, // prettier-ignore
-    components: () => [import(/* webpackChunkName: 'home' */ './Story')],
-    render: ([Story], data) => ({
-      title: data.title,
-      body: <Story story={data.story} />,
+      body: <Home />,
     }),
   },
   {
@@ -48,26 +31,6 @@ const routes = [
     render: ([ErrorPage]) => ({
       title: 'Error',
       body: <ErrorPage />,
-    }),
-  },
-  {
-    path: '/getting-started',
-    query: graphql`query routerGettingStartedQuery { me { ...App_me } }`, // prettier-ignore
-    components: () => [
-      import(/* webpackChunkName: 'start' */ './GettingStarted'),
-    ],
-    render: ([GettingStarted]) => ({
-      title: 'Getting Started',
-      body: <GettingStarted />,
-    }),
-  },
-  {
-    path: '/about',
-    query: graphql`query routerAboutQuery { me { ...App_me } }`, // prettier-ignore
-    components: () => [import(/* webpackChunkName: 'about' */ './About')],
-    render: ([About]) => ({
-      title: 'About Us',
-      body: <About />,
     }),
   },
   {
