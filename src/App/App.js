@@ -92,7 +92,8 @@ class App extends React.Component<any, any, State> {
 window.prerender = async path => {
   history.push(path);
   // TODO: Detect when client-side rendering is complete
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => setTimeout(resolve, 5000));
+  console.log(document.documentElement.outerHTML);
   return document.documentElement.outerHTML
     .replace(/<link type="text\/css" rel="stylesheet" href="blob:.*?>/g, '')
     .replace(/<script .*?<\/head>/g, '</head>');

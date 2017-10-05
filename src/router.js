@@ -26,6 +26,17 @@ const routes = [
     }),
   },
   {
+    path: '/about',
+    query: graphql`query routerHomeQuery {
+      getContributorFeed { ...Home_contributors }
+    }`, // prettier-ignore
+    components: () => [import(/* webpackChunkName: 'home' */ './Home')],
+    render: ([Home], data) => ({
+      title: 'Home page',
+      body: <Home />,
+    }),
+  },
+  {
     path: '/error',
     components: () => [import(/* webpackChunkName: 'main' */ './ErrorPage')],
     render: ([ErrorPage]) => ({
