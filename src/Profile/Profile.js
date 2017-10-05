@@ -22,7 +22,7 @@ const ProfileImage = styled.img`
 const Bio = styled.div`
   margin: auto;
   margin-bottom: 20px;
-  min-width: 320px;
+  min-width: 280px;
   width: 50%;
 `;
 

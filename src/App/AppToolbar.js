@@ -13,7 +13,6 @@ import Link from '../Link';
 const Header = styled.header`
   position: relative;
   display: flex;
-  width: 100%;
   max-width: 960px;
   padding: 1rem;
   margin: 0 auto;
@@ -89,10 +88,12 @@ class AppToolbar extends React.Component {
           <Section start>
             <TitleLink href="/">Robert Biehl</TitleLink>
           </Section>
+          {/*
           <Section end>
             <NavLink href="#projects">Projects</NavLink>
             <NavLink href="#experience">Experience</NavLink>
           </Section>
+          */}
         </Row>
       </Header>
     );

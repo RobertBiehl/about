@@ -67,7 +67,8 @@ const Description = styled(Value)`
 
 const Technologies = styled(Value)`margin: 10px 0;`;
 
-const Technology = styled.span`
+const Technology = styled.div`
+  display: inline-block;
   color: #000;
   font-size: 0.8em;
 
@@ -75,6 +76,7 @@ const Technology = styled.span`
   border-radius: 5px;
   padding: 5px;
   margin-right: 10px;
+  margin-bottom: 10px;
 `;
 
 class Experience extends React.Component {
