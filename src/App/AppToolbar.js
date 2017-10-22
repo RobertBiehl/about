@@ -11,16 +11,19 @@ import styled from 'styled-components';
 import Link from '../Link';
 
 const Header = styled.header`
-  position: relative;
-  display: flex;
-  max-width: 960px;
-  padding: 1rem;
-  margin: 0 auto;
+  @media screen {
+    position: relative;
+    display: flex;
+    max-width: 960px;
 
-  color: #000;
-  flex-direction: column;
-  background-color: #fff;
-  justify-content: space-between;
+    padding: 1rem;
+    margin: 0 auto;
+
+    color: #000;
+    flex-direction: column;
+    background-color: #fff;
+    justify-content: space-between;
+  }
 `;
 
 const Row = styled.div`
@@ -33,6 +36,11 @@ const Row = styled.div`
   box-sizing: border-box;
 
   align-items: center;
+
+  @media print {
+    display: none;
+  }
+
   @media (max-width: 959px) and (orientation: landscape) {
     min-height: 48px;
   }
@@ -76,6 +84,42 @@ const NavLink = styled(Link)`
   }
 `;
 
+const PrintHeader = styled.div`
+  @media screen {
+    display: none;
+  }
+
+  margin-top: 1rem;
+
+  text-align: right;
+  position: fixed;
+  right: 2em;
+
+  & .address {
+    color: #999;
+    font-size: 0.9em;
+    & a {
+      color: #999;
+      text-decoration: underline;
+    }
+  }
+
+  & .name {
+  }
+
+  & .row {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+
+  & .title {
+    text-align: center;
+    flex: 1;
+    display: flex;
+  }
+`;
+
 class AppToolbar extends React.Component {
   props: {
     hero: React.Element<*>,
@@ -95,6 +139,18 @@ class AppToolbar extends React.Component {
           </Section>
           */}
         </Row>
+        <PrintHeader>
+          <TitleLink className="name">Robert Biehl</TitleLink>
+          <div className={'address'}>
+            Wilhelminenstraße 19<br />
+            64823 Darmstadt<br />
+            <br />
+            +49 175 5690094<br />
+            <a href={'mailto:hi@robertbiehl.com'}>hi@robertbiehl.com</a>
+            <br />
+            <a href={'http://robertbiehl.com'}>robertbiehl.com</a>
+          </div>
+        </PrintHeader>
       </Header>
     );
   }

@@ -10,6 +10,10 @@ import React from 'react';
 import styled from 'styled-components';
 import nl2br from 'react-nl2br';
 
+import { graphql, createFragmentContainer } from 'react-relay';
+
+import type { Profile_profile } from './__generated__/Profile_profile.graphql';
+
 const Container = styled.div`text-align: center;`;
 
 const ProfileImage = styled.img`
@@ -45,30 +49,27 @@ const SocialLink = styled.a`
 `;
 
 type Props = {
-  imageURL: ?String,
-  name: ?String,
-  social: ?Object,
-  bio: ?String,
+  profile: ?Profile_profile,
 };
 
 type State = {};
 
 class Profile extends React.Component<any, Props, State> {
   render() {
-    const social = this.props.social;
+    const profile = this.props.profile || {};
+    const social = profile.social;
     return (
-      <Container>
-        <ProfileImage src={this.props.imageURL} alt={this.props.name} />
-        <Bio>{nl2br(this.props.bio)}</Bio>
+      <Container {...this.props}>
+        <ProfileImage src={profile.image} alt={profile.name} />
+        <Bio>{nl2br(profile.bio)}</Bio>
         <SocialLinks>
           {social ? (
-            Object.keys(social).map(function(key, index) {
-              const link = social[key];
+            social.map(({ title, url }) => {
               return (
-                <SocialLink href={link} key={key}>
+                <SocialLink href={url} key={title}>
                   <img
-                    src={'/img/social/' + key.toLowerCase() + '.svg'}
-                    alt={key}
+                    src={'/img/social/' + title.toLowerCase() + '.svg'}
+                    alt={title}
                   />
                 </SocialLink>
               );
@@ -80,4 +81,19 @@ class Profile extends React.Component<any, Props, State> {
   }
 }
 
-export default Profile;
+export default createFragmentContainer(
+  Profile,
+  // This `_list` fragment name suffix corresponds to the prop named `list` that
+  // is expected to be populated with server data by the `<TodoList>` component.
+  graphql`
+    fragment Profile_profile on Profile {
+      name
+      image
+      bio
+      social {
+        title
+        url
+      }
+    }
+  `,
+);

@@ -13,8 +13,11 @@ const Footer = styled.div`
   padding: 1rem;
   margin: 0 auto;
 
-  padding: 24px;
   color: rgba(0, 0, 0, 1);
+
+  @media print {
+    display: none;
+  }
 `;
 
 const Copyright = styled.span`padding-right: 0.5em;`;
@@ -23,7 +26,7 @@ class AppFooter extends React.Component {
   render() {
     return (
       <Footer>
-        <Copyright css="padding-right: 0.5em">&copy; 2017</Copyright>
+        <Copyright>&copy; 2017</Copyright>
         Robert Biehl
       </Footer>
     );

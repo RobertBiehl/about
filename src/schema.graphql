@@ -3,7 +3,107 @@ type Contributor {
   location: String!
 }
 
-#returns list of contributors
+type Link {
+  title: String!
+  url: String!
+}
+
+type Technology {
+  title: String!
+  items: [String]
+  description: String
+}
+
+type Media {
+  type: String!
+  description: String
+  url: String!
+  urls: [Link]
+  shortLink: Link
+}
+
+type Address {
+  name: String
+  company: String
+  streetAddress: String
+  city: String
+  postalCode: String
+  email: String
+  link: Link
+}
+
+type Profile {
+  name: String!
+  image: String
+  bio: String
+  social: [Link]
+  dateOfBirth: String,
+  placeOfBirth: String,
+  nationality: String,
+  maritalStatus: String,
+  languages: [String]
+  address: Address
+}
+
+type Skills {
+  skills: [Technology]
+  html: String
+}
+
+type Letter {
+  id: String
+  address: Address
+  jobId: String
+  jobName: String
+  coverTitle: String
+  coverSubtitle: String
+  subject: String
+  html: String
+}
+
+type Project {
+  id: String!
+  title: String!
+  shortTitle: String
+  description: String
+  dateStart: String!
+  dateEnd: String
+  logo: String
+  aspects: [String]
+  media: [Media]
+  technologies: [Technology]
+  links: [Link]
+  references: [Link]
+  body: String
+  header: String
+  headerColor1: String
+  headerColor2: String
+}
+
+type Experience {
+  range: String
+  icon: String
+  location: String
+  company: String
+  position: String
+  description: String
+  technologies: [Technology]
+  highlighted: Boolean
+  projects: [Project]
+}
+
+type Document {
+  title: String
+  urls: [String]
+}
+
 type Query {
   getContributorFeed : [Contributor]
+  getProfile: Profile
+  getLetter(id: ID!): Letter
+  getSkills: Skills
+  getProjects : [Project]
+  getProject(id: ID!): Project
+  getDocuments: [Document]
+  getExperienceList : [Experience]
 }

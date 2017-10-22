@@ -7,8 +7,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
-//import { graphql, createFragmentContainer } from 'react-relay';
-//import type { Home_stories } from './__generated__/Home_stories.graphql';
+import { graphql, createFragmentContainer } from 'react-relay';
 
 import Profile from '../Profile';
 import Projects from '../Projects';
@@ -30,20 +29,7 @@ export default class Home extends React.Component {
   render() {
     return (
       <div>
-        <Profile
-          imageURL={'/img/profile.jpg'}
-          name={'Robert Biehl'}
-          bio={
-            "I'm Robert Biehl, avid software engineer, interested in computer vision and space exploration.\n\nI do have approximate knowledge of many things"
-          }
-          social={{
-            email: 'mailto:rbiehl@irrealdesigns.com',
-            twitter: '//twitter.com/robeffect',
-            github: '//github.com/RobertBiehl',
-            stackoverflow: '//stackoverflow.com/users/298420/robert',
-            linkedin: '//www.linkedin.com/in/robert-biehl-463aab1b',
-          }}
-        />
+        <Profile profile={this.props.profile} />
 
         <Container>
           <ProjectsContainer>
@@ -118,7 +104,7 @@ export default class Home extends React.Component {
           <h2 name={'experience'} id={'experience'}>
             {'Experience'}
           </h2>
-          <Experience />
+          <Experience list={this.props.experienceList} />
         </Container>
       </div>
     );

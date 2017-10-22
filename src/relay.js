@@ -18,12 +18,12 @@ function fetchQuery(
   return fetch(
     process.env.REACT_APP_API
       ? `${process.env.REACT_APP_API}/graphql`
-      : 'https://graphql-demo.kriasoft.com/',
+      : 'http://localhost:4000/graphql',
     {
       method: 'POST',
       headers: {
         // Add authentication and other headers here
-        'x-api-key': 'HvBx4fa4vH58MCg04Wkp33ruyZv9qHuYaQb5viM1',
+        'x-api-key': `${process.env.REACT_APP_API_KEY}`,
         'content-type': 'application/json',
       },
       body: JSON.stringify({

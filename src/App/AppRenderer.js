@@ -17,6 +17,14 @@ const Main = styled.div`
   max-width: 960px;
   padding: 1rem;
   margin: 0 auto;
+  font-family: 'Avenir Next', 'Helvetica-Neue', 'Helvetica', 'Arial', sans-serif;
+  line-height: 1.5;
+
+  & h1,
+  & h2,
+  & h3 {
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  }
 `;
 
 type Props = {
@@ -105,6 +113,7 @@ class AppRenderer extends React.Component<any, Props, State> {
   }
 
   render() {
+    document.title = this.state.title || document.title;
     return this.state.error ? (
       <ErrorPage error={this.state.error} />
     ) : (

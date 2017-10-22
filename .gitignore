@@ -26,3 +26,9 @@ yarn-error.log*
 .vscode/*
 !.vscode/snippets
 !.vscode/settings.json
+
+# Content
+/public/img/profile*
+/public/img/projects
+/public/pdf
+/public/video

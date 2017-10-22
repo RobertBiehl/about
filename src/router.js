@@ -17,23 +17,89 @@ const routes = [
   {
     path: '/',
     query: graphql`query routerHomeQuery {
-      getContributorFeed { ...Home_contributors }
+      experienceList: getExperienceList { ...Experience_list }
+      profile: getProfile { ...Profile_profile }
     }`, // prettier-ignore
     components: () => [import(/* webpackChunkName: 'home' */ './Home')],
     render: ([Home], data) => ({
       title: 'Home page',
-      body: <Home />,
+      body: (
+        <Home experienceList={data.experienceList} profile={data.profile} />
+      ),
     }),
   },
   {
-    path: '/about',
-    query: graphql`query routerHomeQuery {
-      getContributorFeed { ...Home_contributors }
+    path: '/cv',
+    query: graphql`query routerAboutQuery {
+      experienceList: getExperienceList { ...Experience_list }
+      profile: getProfile {
+        ...Profile_profile
+        ...CVPage_profile
+      }
     }`, // prettier-ignore
-    components: () => [import(/* webpackChunkName: 'home' */ './Home')],
-    render: ([Home], data) => ({
-      title: 'Home page',
-      body: <Home />,
+    components: () => [import('./CVPage')],
+    render: ([CVPage], data) => ({
+      title: 'Resume',
+      body: (
+        <CVPage experienceList={data.experienceList} profile={data.profile} />
+      ),
+    }),
+  },
+  {
+    path: '/project/:id',
+    query: graphql`query routerProjectQuery($id: ID!) {
+      project: getProject(id: $id) { ...ProjectPage_project }
+    }`, // prettier-ignore
+    components: () => [import(/* webpackChunkName: 'home' */ './ProjectPage')],
+    render: ([ProjectPage], data) => ({
+      title:
+        data.project && data.project.title
+          ? 'Project: ' + data.project.title
+          : data.title,
+      body: <ProjectPage project={data.project} />,
+    }),
+  },
+  {
+    path: '/letter/:id',
+    query: graphql`query routerLetterPageQuery($id: ID!) {
+      experienceList: getExperienceList { ...Experience_list }
+      profile: getProfile {
+        ...LetterPage_profile
+      }
+      profile2: getProfile {
+        ...CVPage_profile
+      }
+      documents: getDocuments {
+        ...DocumentPage_document
+      }
+      projects: getProjects {
+        ...ProjectPage_project
+      }
+      letter: getLetter(id: $id) { ...LetterPage_letter }
+      skills: getSkills { ...LetterPage_skills }
+    }`, // prettier-ignore
+    components: () => [
+      import('./LetterPage'),
+      import('./CVPage'),
+      import('./DocumentPage'),
+      import('./ProjectPage'),
+    ],
+    render: ([LetterPage, CVPage, DocumentPage, ProjectPage], data) => ({
+      body: (
+        <div>
+          <LetterPage
+            profile={data.profile}
+            letter={data.letter}
+            skills={data.skills}
+          />
+          <CVPage
+            experienceList={data.experienceList}
+            profile={data.profile2}
+          />
+          {data.documents.map(d => <DocumentPage document={d} key={d.title} />)}
+          {data.projects.map(p => <ProjectPage project={p} key={p.title} />)}
+        </div>
+      ),
     }),
   },
   {

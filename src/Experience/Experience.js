@@ -6,11 +6,25 @@
 /* @flow */
 
 import React from 'react';
-
 import styled from 'styled-components';
-import md from './index.md';
-
 import nl2br from 'react-nl2br';
+import { graphql, createFragmentContainer } from 'react-relay';
+
+import type { Experience_list } from './__generated__/Experience_list.graphql';
+
+import LocalizedStrings from 'react-localization';
+let strings = new LocalizedStrings({
+  en: {
+    see: 'see',
+    projects: 'Project(s)',
+    project: 'Project',
+  },
+  de: {
+    see: 'siehe',
+    projects: 'Projekt(e)',
+    project: 'Projekt',
+  },
+});
 
 const Container = styled.div`
   flex: 1;
@@ -21,6 +35,13 @@ const Item = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 20px;
+
+  page-break-inside: avoid;
+
+  &.highlighted {
+    color: #d3b47d;
+    font-weight: normal;
+  }
 `;
 
 const Range = styled.div`
@@ -62,12 +83,15 @@ const Description = styled(Value)`
   margin-bottom: 10px;
   max-width: 400px;
   font-size: 0.8em;
-  font-weight: lighter;
+
+  @media print {
+    font-size: 1em;
+  }
 `;
 
 const Technologies = styled(Value)`margin: 10px 0;`;
 
-const Technology = styled.div`
+const Technology = styled.span`
   display: inline-block;
   color: #000;
   font-size: 0.8em;
@@ -77,15 +101,65 @@ const Technology = styled.div`
   padding: 5px;
   margin-right: 10px;
   margin-bottom: 10px;
+
+  @media print {
+    font-size: 1em;
+  }
 `;
 
-class Experience extends React.Component {
+const Projects = styled(Value)`
+  margin: 10px 0;
+  color:#999;
+  font-size: 0.8em;
+
+  @media print {
+    display:none;
+    & :before {
+      content: '${strings.see} ';
+    }
+  }
+`;
+
+const Project = styled.a`
+  display: inline-block;
+  margin-right: 0.5em;
+  text-decoration: none;
+  color:#999;
+
+  @media screen {
+    & :before {
+      content: '→ ${strings.project}: ';
+    }
+  }
+  @media print {
+    & :after {
+      content: ', ';
+    }
+    & :last-child:after{
+      content: '';
+    }
+  }
+`;
+
+type Props = {
+  list: ?any,
+};
+
+class Experience extends React.Component<any, Props, any> {
   render() {
-    const list = md.list || [];
+    console.log(
+      'PROPS: ' + (this.props.list ? JSON.stringify(this.props.list) : 'null'),
+    );
+
+    const list = this.props.list || [];
+
     return (
       <Container>
         {list.map(item => (
-          <Item key={item.range + item.title} style={item.style}>
+          <Item
+            key={item.range + item.position}
+            className={item.highlighted ? 'highlighted' : null}
+          >
             <Range>
               {item.range}
               {item.icon ? <Icon src={item.icon} alt={item.title} /> : null}
@@ -94,7 +168,22 @@ class Experience extends React.Component {
               <Position>{item.position}</Position>
               <Company>{item.company}</Company>
               <Location>{item.location}</Location>
-              <Description>{nl2br(item.description)}</Description>
+              {item.description ? (
+                <Description>{nl2br(item.description)}</Description>
+              ) : null}
+              {item.projects ? (
+                <Projects>
+                  {item.projects.map(project => (
+                    <Project
+                      href={'/project/' + project.id}
+                      title={project.shortTitle}
+                      key={project.id}
+                    >
+                      {project.shortTitle}
+                    </Project>
+                  ))}
+                </Projects>
+              ) : null}
               {item.technologies ? (
                 <Technologies>
                   {item.technologies.map(tech => (
@@ -112,4 +201,27 @@ class Experience extends React.Component {
   }
 }
 
-export default Experience;
+export default createFragmentContainer(
+  Experience,
+  // This `_list` fragment name suffix corresponds to the prop named `list` that
+  // is expected to be populated with server data by the `<Experience>` component.
+  graphql`
+    fragment Experience_list on Experience @relay(plural: true) {
+      range
+      icon
+      location
+      position
+      company
+      description
+      highlighted
+      technologies {
+        title
+        description
+      }
+      projects {
+        shortTitle
+        id
+      }
+    }
+  `,
+);

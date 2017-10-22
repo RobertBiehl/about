@@ -52,8 +52,6 @@ const Project = styled.a`
   align-items: center;
   overflow: hidden;
 
-  pointer-events: none;
-
   transform: scale3d(1, 1, 1);
   transition: transform 0.5s ease;
   &:hover {
@@ -72,6 +70,12 @@ const Project = styled.a`
     opacity: 1;
   }
 `;
+
+const ProjectTitle = styled.span`
+  position: absolute;
+  text-indent: 9000px;
+`;
+
 class Projects extends React.Component {
   render() {
     const projects = this.props.projects || [];
@@ -82,15 +86,19 @@ class Projects extends React.Component {
             href={project.url}
             key={project.title}
             style={this.styleForProject(project)}
-            title={project.title}
           >
+            <ProjectTitle>{project.title}</ProjectTitle>
             {project.video ? (
               <Video muted autoPlay loop playsInline>
                 <source src={project.video} type="video/mp4" />
               </Video>
             ) : null}
             {project.logo ? (
-              <Logo src={project.logo} alt={project.title} />
+              <Logo
+                src={project.logo}
+                alt={project.title}
+                title={project.title}
+              />
             ) : (
               project.title
             )}
